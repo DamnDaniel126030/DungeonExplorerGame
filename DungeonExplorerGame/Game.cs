@@ -40,7 +40,9 @@ namespace DungeonExplorerGame
 			do
 			{
 				Console.Clear();
+
 				map.Draw();
+
 				Potion potionPickUp = potions.FirstOrDefault(potion => potion.X == player.X && potion.Y == player.Y);
 				if (potionPickUp != null)
 				{
@@ -48,18 +50,30 @@ namespace DungeonExplorerGame
 					potions.Remove(potionPickUp);
 					Console.WriteLine($"You've found a potion! Your current health changed to: {player.HP}");
 				}
+
+				if (player.X == enemy.X && player.Y == enemy.Y)
+				{
+					Fighting();
+					Console.WriteLine($"You had a fight with the enemy!\nYour new hp: {player.HP}\nThe enemy's new hp: {enemy.HP}");
+				}
+
 				foreach (Potion potion in potions)
 				{
 					potion.Draw();
 				}
+
+				
+
 				player.Draw();
+
 				enemy.Draw();
+
 				ConsoleKey direction = Console.ReadKey(true).Key;
 				player.Moving(direction, map);
+
 				//TODO: enemy moving
 				//TODO: fight with enemy, if on the same spot
 
-				
 				EnemyMoving();
 
 
@@ -88,6 +102,12 @@ namespace DungeonExplorerGame
 			{
 				enemy.Y = newY;
 			}
+		}
+
+		private void Fighting()
+		{
+			player.HP -= rnd.Next(10, 30);
+			enemy.HP -= rnd.Next(5, 20);
 		}
 	}
 }
