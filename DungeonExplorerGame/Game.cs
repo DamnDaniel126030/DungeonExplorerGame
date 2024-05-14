@@ -50,7 +50,16 @@ namespace DungeonExplorerGame
 				player.Moving(direction, map);
 				//TODO: enemy moving
 				//TODO: fight with enemy, if on the same spot
-				//TODO: drink potion
+
+				Potion potionPickUp = potions.FirstOrDefault(potion => potion.X == player.X && potion.Y == player.Y);
+				if (potionPickUp != null)
+				{
+					player.HP += potionPickUp.HPChange;
+					potions.Remove(potionPickUp);
+                    Console.WriteLine($"You've found a potion! Your current health changed to: {player.HP}");
+                }
+				EnemyMoving();
+
 
 
 			} while (running && player.HP > 0);
@@ -59,6 +68,24 @@ namespace DungeonExplorerGame
 			{
                 Console.WriteLine("YOU DIED");
             }
+		}
+
+		private void EnemyMoving()
+		{
+			int dx = rnd.Next(-1, 2);
+			int dy = rnd.Next(-1, 2);
+
+			int newX = enemy.X + dx;
+			int newY = enemy.Y + dy;
+
+			if (newX >= 1 && newX < map.Width - 1 && map.Atlas[enemy.Y, newX] == ' ')
+			{
+				enemy.X = newX;
+			}
+			if (newY >= 1 && newY < map.Height - 1 && map.Atlas[newY, enemy.X] == ' ')
+			{
+				enemy.Y = newY;
+			}
 		}
 	}
 }
