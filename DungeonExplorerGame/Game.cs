@@ -39,7 +39,15 @@ namespace DungeonExplorerGame
 			bool running = true;
 			do
 			{
+				Console.Clear();
 				map.Draw();
+				Potion potionPickUp = potions.FirstOrDefault(potion => potion.X == player.X && potion.Y == player.Y);
+				if (potionPickUp != null)
+				{
+					player.HP += potionPickUp.HPChange;
+					potions.Remove(potionPickUp);
+					Console.WriteLine($"You've found a potion! Your current health changed to: {player.HP}");
+				}
 				foreach (Potion potion in potions)
 				{
 					potion.Draw();
@@ -51,13 +59,7 @@ namespace DungeonExplorerGame
 				//TODO: enemy moving
 				//TODO: fight with enemy, if on the same spot
 
-				Potion potionPickUp = potions.FirstOrDefault(potion => potion.X == player.X && potion.Y == player.Y);
-				if (potionPickUp != null)
-				{
-					player.HP += potionPickUp.HPChange;
-					potions.Remove(potionPickUp);
-                    Console.WriteLine($"You've found a potion! Your current health changed to: {player.HP}");
-                }
+				
 				EnemyMoving();
 
 
